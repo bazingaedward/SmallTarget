@@ -11,8 +11,8 @@ import {Platform, StyleSheet, Text, View, TextInput, Button,
   Alert, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, 
   TouchableWithoutFeedback, ScrollView, Image, FlatList, SectionList, ActivityIndicator} from 'react-native';
 import Tabbar from 'react-native-tabbar-bottom';
-// import HomeScreen from './pages/HomeScreen';
-// import ProfileScreen from './pages/ProfileScreen';
+import ListScreen from './pages/list';
+import ProfileScreen from './pages/profile';
 
 
 class App extends React.Component{
@@ -54,6 +54,16 @@ class App extends React.Component{
    * 针对不同页面渲染对应的tab页面
    */
   renderMain(){
+    
+    const {page} = this.state;
+
+    switch(page){
+      case 'ListScreen':
+        return <ListScreen />
+      case 'ProfileScreen':
+        return <ProfileScreen />
+      
+    }
 
   }
 
@@ -66,10 +76,10 @@ class App extends React.Component{
 
     return (
         <Tabbar
-            tabbarBgColor={'green'}
+            tabbarBgColor={'#4267b2'}
             stateFunc={(tab) => {
               this.setState({page: tab.page})
-              this.props.navigation.setParams({tabTitle: tab.title})
+              // this.props.navigation.setParams({tabTitle: tab.title})
             }}
             activePage={page}
             tabs={this.indata.TabOptions}
@@ -85,7 +95,7 @@ class App extends React.Component{
         {this.renderMain()}
 
         {this.renderFooter()}
-        
+
       </View>
     )
   }

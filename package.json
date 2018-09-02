@@ -10,6 +10,7 @@
     "native-base": "^2.7.2",
     "react": "16.4.1",
     "react-native": "0.56.0",
+    "react-native-easy-grid": "^0.2.0",
     "react-native-tabbar-bottom": "^1.0.4",
     "react-navigation": "^2.12.1"
   },
