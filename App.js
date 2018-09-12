@@ -6,47 +6,58 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, Button, 
-  Alert, TouchableHighlight, TouchableOpacity, TouchableNativeFeedback, 
-  TouchableWithoutFeedback, ScrollView, Image, FlatList, SectionList, ActivityIndicator} from 'react-native';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import Tabbar from 'react-native-tabbar-bottom';
-import ListScreen from './pages/list';
+import ListStack from './containers/ListStack'
 import ProfileScreen from './pages/profile';
-
+import {createStore} from 'redux';
+import reducer from './reducers'
+import {Provider} from 'react-redux';
 
 class App extends React.Component{
   constructor(props){
     super(props);
 
     this.state = {
-      page: 'ListScreen'
+      page: 'List'
     }
 
     this.indata = {
       TabOptions: [
         {
-          page: "ListScreen",
+          page: "List",
           icon: "list",
           iconText: '列表'
         },
         {
-          page: "AnalyticsScreen",
+          page: "Analytics",
           icon: "analytics",
           iconText: '数据'
         },
         {
-          page: "ApertureScreen",
+          page: "Aperture",
           icon: "aperture",
           iconText: '朋友圈'
         },
         {
-          page: "ProfileScreen",
+          page: "Profile",
           icon: "person",
           iconText: '我的'
         },
-      ]
+      ],
+      preloadedState: {
+        List: {
+          dataList: [
+            {
+              title: '小目标',
+              intro: '快来添加你的第一个任务吧',
+            }
+          ]
+        }
+      }
     }
+    
 
   }
 
@@ -58,9 +69,9 @@ class App extends React.Component{
     const {page} = this.state;
 
     switch(page){
-      case 'ListScreen':
-        return <ListScreen />
-      case 'ProfileScreen':
+      case 'List':
+        return <ListStack />
+      case 'Profile':
         return <ProfileScreen />
       
     }
@@ -89,14 +100,22 @@ class App extends React.Component{
 
   render(){
 
+    // redux 注入
+    const store = createStore(reducer, this.indata.preloadedState);
+
     return (
-      <View style={styles.container}>
+      <Provider store={store}>
 
-        {this.renderMain()}
+        <View style={styles.container}>
 
-        {this.renderFooter()}
+          {this.renderMain()}
 
-      </View>
+          {this.renderFooter()}
+
+        </View>
+
+      </Provider>
+      
     )
   }
 }
@@ -106,6 +125,9 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
+
+
+
 
 export default App;
 

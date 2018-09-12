@@ -6,7 +6,7 @@ import { Container, Left, Right, Icon, Content, List, ListItem, Text,
  Header, Title, Subtitle, Separator, Radio, Segment, Spinner, Tabs, Tab,
  ScrollableTab, Root, Toast, H1, H2, H3} from 'native-base';
  import { Col, Row, Grid } from 'react-native-easy-grid';
- import AddScreen from './add';
+
 
 class ListScreen extends React.Component {
 
@@ -18,27 +18,16 @@ class ListScreen extends React.Component {
         super(props);
 
         this.state = {
-          dataList: [
-            {
-              title: 'hello',
-              intro: 'world'
-            },
-            {
-              title: 'hello',
-              intro: 'world'
-            },
-            {
-              title: 'hello',
-              intro: 'world'
-            },
-            {
-              title: 'hello',
-              intro: 'world'
-            },
-          ]
+          dataList: props.dataList || []
         }
 
 
+    }
+
+    componentWillReceiveProps(nextProps){
+      this.setState({
+        dataList: nextProps.dataList
+      })
     }
 
     /**
@@ -46,7 +35,7 @@ class ListScreen extends React.Component {
      */
     onAddTask(){
 
-      this.props.navigation.navigate('Add', {hello: 123});
+      this.props.navigation.navigate('Add');
     }
 
 
@@ -55,44 +44,26 @@ class ListScreen extends React.Component {
       const {dataList} = this.state;
 
       return (
-        <Container>
-          <Content>
-            {
-              dataList.map((item, idx) => {
-                return (
-                  <Card key={idx}>
-                    <CardItem header><Text>{item.title}</Text></CardItem>
-                    <CardItem ><Text>{item.intro}</Text></CardItem>
-                  </Card>
-                )
-              })
-            }
+        <Root>
+          <Container>
+            <Content>
+              {
+                dataList.map((item, idx) => {
+                  return (
+                    <Card key={idx}>
+                      <CardItem header><Text>{item.title}</Text></CardItem>
+                      <CardItem ><Text>{item.intro}</Text></CardItem>
+                    </Card>
+                  )
+                })
+              }
 
-            <Button block onPress={this.onAddTask.bind(this)}><Text>添加任务</Text></Button>
-          </Content>
-        </Container>
+              <Button block onPress={this.onAddTask.bind(this)}><Text>添加任务</Text></Button>
+            </Content>
+          </Container>
+        </Root>
       )
     }
 }
 
-const ListStack = createStackNavigator(
-  {
-      Home: ListScreen,
-      Add: AddScreen,
-  },
-  {
-      initialRouteName: 'Home',
-      /* The header config from HomeScreen is now here */
-      navigationOptions: {
-        headerTitleStyle: { textAlign: 'center' },
-        headerStyle: {
-          backgroundColor: '#4267b2',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      },
-    }
-);
-export default ()=><Root><ListStack/></Root>
+export default ListScreen;

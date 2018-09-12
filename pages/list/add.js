@@ -31,6 +31,8 @@ class AddScreen extends React.Component {
         const {title, intro} = this.state;
         const {goBack} = this.props.navigation;
 
+        this.props.addTask(title, intro);
+
         goBack();
     }
 
@@ -61,7 +63,6 @@ class AddScreen extends React.Component {
 
                 <Button 
                     block 
-                    
                     onPress={this.onSubmit.bind(this)}
                     >
                     <Text>完成</Text>
