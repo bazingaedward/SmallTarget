@@ -22,25 +22,44 @@ class AddScreen extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {
-            title: '',
-            intro: '',
-            showDialog: false
-        }
+        let type = props.navigation.getParam('type');
+        let item = props.navigation.getParam('item')
 
+        switch(type){
+            case 'add': 
+                this.state = {
+                    title: '',
+                    intro: '',
+                    showDialog: false,
+                    editMode: false,
+                }
+                break;
+            case 'edit': 
+                this.state = {
+                    title: item.title,
+                    intro: item.intro,
+                    showDialog: false,
+                    editMode: true,
+                    _taskId: item._taskId
+                }
+                break;
+        }
+        
         this.indata = {
-            title: '添加任务',
+            title: type === 'add' ? '添加任务' : '编辑任务',
             titleIcon: 'arrow-back'
           }
+        
     }
 
     /**
      * 提交任务保存
      */
     onSubmit(){
-        const {title, intro} = this.state;
+        const {title, intro, editMode, _taskId} = this.state;
         const {goBack} = this.props.navigation;
 
+        // 效验标题有效
         if(!title.length){
             this.setState({
                 showDialog: true
@@ -49,9 +68,33 @@ class AddScreen extends React.Component {
         }
         
 
-        this.props.addTask(title, intro);
+        if(!editMode){
+
+            this.props.actions.addTask(title, intro);
+
+        }else {
+
+            this.props.actions.editTask(_taskId, title, intro);
+
+        }
+        
 
         goBack();
+    }
+
+    /**
+     * 删除任务
+     */
+    onDelete(){
+
+        const {title, intro, _taskId} = this.state;
+        const {goBack} = this.props.navigation;
+        
+
+        this.props.actions.delTask(_taskId);
+
+        goBack();
+
     }
 
 /**
@@ -87,7 +130,7 @@ class AddScreen extends React.Component {
      */
     renderBody(){
 
-        const {title, intro} = this.state;
+        const {title, intro, editMode} = this.state;
 
         return (
             <Content>
@@ -108,7 +151,16 @@ class AddScreen extends React.Component {
                     />
                 </Form>
 
-                <Button block danger style={styles.delBtn}><Text>删除</Text></Button>
+                {editMode && (
+                    <Button 
+                        block 
+                        danger 
+                        style={styles.delBtn}
+                        onPress={this.onDelete.bind(this)}
+                    ><Text>删除</Text>
+                    </Button>
+                )}
+                
 
             </Content>
         )

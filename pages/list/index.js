@@ -9,13 +9,6 @@ import { Container, Left, Right, Icon, Content, List, ListItem, Text,
  import {StyleSheet} from 'react-native'
  import {fromJS} from 'immutable';
 
- const styles = StyleSheet.create({
-  addBtn: {
-    color: '#fff',
-    backgroundColor: '#4267b2'
-  }
-});
-
 class ListScreen extends React.Component {
 
   static navigationOptions = {
@@ -54,13 +47,13 @@ class ListScreen extends React.Component {
      * 跳转添加任务列表
      * @param {string} type 跳转的类型,add: 新增, edit:编辑, 默认新增
      */
-    goTaskDetail(type='add', item={}){
+    goTaskDetail(type, item={}){
 
       let params = {
-        type: type, 
-        item: item
+        type, 
+        item
       }
-      console.warn(params,112)
+
       this.props.navigation.navigate('Add', params);
     }
 
@@ -81,7 +74,7 @@ class ListScreen extends React.Component {
             <Title>{this.indata.title}</Title>
           </Body>
           <Right>
-            <Button transparent onPress={this.goTaskDetail.bind(this)}>
+            <Button transparent onPress={this.goTaskDetail.bind(this, 'add')}>
               <Icon name='add' />
             </Button>
           </Right>
@@ -98,12 +91,14 @@ class ListScreen extends React.Component {
       const {dataList} = this.state;
 
       return (
-        <Content>
+        <Content >
           {
             dataList.map((item, idx) => {
               return (
-                <Card key={idx} onPress={this.goTaskDetail.bind(this, 'edit', {...item, _taskId: idx})}>
-                  <CardItem header><Text>{item.title}</Text></CardItem>
+                <Card key={idx} style={styles.cardItem} >
+                  <CardItem header button onPress={this.goTaskDetail.bind(this, 'edit', {...item, _taskId: idx})}>
+                    <Text>{item.title}</Text>
+                  </CardItem>
                   <CardItem ><Text>{item.intro}</Text></CardItem>
                 </Card>
               )
@@ -129,6 +124,17 @@ class ListScreen extends React.Component {
       )
     }
 }
+
+const styles = StyleSheet.create({
+  addBtn: {
+    color: '#fff',
+    backgroundColor: '#4267b2'
+  },
+  cardItem: {
+    marginLeft: 10,
+    marginRight: 10
+  }
+});
 
 
 
