@@ -6,13 +6,27 @@ import { Container, Left, Right, Icon, Content, List, ListItem, Text,
  Header, Title, Subtitle, Separator, Radio, Segment, Spinner, Tabs, Tab,
  ScrollableTab, Root, Toast, H1, H2, H3} from 'native-base';
  import { Col, Row, Grid } from 'react-native-easy-grid';
+ import {StyleSheet} from 'react-native'
+ import {fromJS} from 'immutable';
 
+ const styles = StyleSheet.create({
+  addBtn: {
+    color: '#fff',
+    backgroundColor: '#4267b2'
+  }
+});
 
 class ListScreen extends React.Component {
 
-    static navigationOptions = {
-        title: '任务列表',
-      };
+  static navigationOptions = {
+    header: null,
+    // title: '任务列表',
+    // headerRight: (
+    //   <Button style={styles.addBtn} onPress={this.onAddTask}>
+    //     <Icon name={'add'} />
+    //   </Button>
+    // ),
+  };
 
     constructor(props){
         super(props);
@@ -21,8 +35,14 @@ class ListScreen extends React.Component {
           dataList: props.dataList || []
         }
 
+        this.indata = {
+          title: '任务列表',
+          titleIcon: 'list'
+        }
 
     }
+
+    
 
     componentWillReceiveProps(nextProps){
       this.setState({
@@ -32,38 +52,84 @@ class ListScreen extends React.Component {
 
     /**
      * 跳转添加任务列表
+     * @param {string} type 跳转的类型,add: 新增, edit:编辑, 默认新增
      */
-    onAddTask(){
+    goTaskDetail(type='add', item={}){
 
-      this.props.navigation.navigate('Add');
+      let params = {
+        type: type, 
+        item: item
+      }
+      console.warn(params,112)
+      this.props.navigation.navigate('Add', params);
+    }
+
+    /**
+     * 渲染导航栏
+     * react-navigation无法提供header中的this绑定，故取消 
+     */
+    renderHeader(){
+
+      return (
+        <Header>
+          <Left>
+            <Button transparent>
+              <Icon name={this.indata.titleIcon} />
+            </Button>
+          </Left>
+          <Body>
+            <Title>{this.indata.title}</Title>
+          </Body>
+          <Right>
+            <Button transparent onPress={this.goTaskDetail.bind(this)}>
+              <Icon name='add' />
+            </Button>
+          </Right>
+        </Header>
+      )
+
+    }
+
+    /**
+     * 渲染任务列表
+     */
+    renderBody(){
+
+      const {dataList} = this.state;
+
+      return (
+        <Content>
+          {
+            dataList.map((item, idx) => {
+              return (
+                <Card key={idx} onPress={this.goTaskDetail.bind(this, 'edit', {...item, _taskId: idx})}>
+                  <CardItem header><Text>{item.title}</Text></CardItem>
+                  <CardItem ><Text>{item.intro}</Text></CardItem>
+                </Card>
+              )
+            })
+          }
+        </Content>
+      )
     }
 
 
     render() {
 
-      const {dataList} = this.state;
-
       return (
         <Root>
           <Container>
-            <Content>
-              {
-                dataList.map((item, idx) => {
-                  return (
-                    <Card key={idx}>
-                      <CardItem header><Text>{item.title}</Text></CardItem>
-                      <CardItem ><Text>{item.intro}</Text></CardItem>
-                    </Card>
-                  )
-                })
-              }
 
-              <Button block onPress={this.onAddTask.bind(this)}><Text>添加任务</Text></Button>
-            </Content>
+            {this.renderHeader()}
+
+            {this.renderBody()}
+            
           </Container>
         </Root>
       )
     }
 }
+
+
 
 export default ListScreen;

@@ -88,7 +88,7 @@ class App extends React.Component{
     return (
         <Tabbar
             tabbarBgColor={'#4267b2'}
-            stateFunc={(tab) => {
+            stateFunc={tab => {
               this.setState({page: tab.page})
               // this.props.navigation.setParams({tabTitle: tab.title})
             }}

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import { addTask } from '../actions';
 import ListScreen from '../pages/list/index';
 import AddScreen from '../pages/list/add';
+import {get} from 'immutable';
 
 const ListStack = createStackNavigator(
   {
@@ -12,7 +13,6 @@ const ListStack = createStackNavigator(
   },
   {
       initialRouteName: 'Home',
-      /* The header config from HomeScreen is now here */
       navigationOptions: {
         headerTitleStyle: { textAlign: 'center' },
         headerStyle: {

@@ -1,5 +1,7 @@
 import {
   ADD_TASK,
+  DELETE_TASK,
+  EDIT_TASK
 } from '../constants/ActionTypes'
 
 const initialState = {
@@ -11,10 +13,11 @@ const initialState = {
   ]
 }
 
-export default function List(state=initialState, action) {
+export default function ListReducer(state=initialState, action) {
+
   switch (action.type) {
     case ADD_TASK:
-      return {
+        return {
           dataList: [
             ...state.dataList,
             {
@@ -23,7 +26,22 @@ export default function List(state=initialState, action) {
             }
           ]
         }
+      
+    // case DELETE_TASK:
+    //     return {
 
+    //     }
+      //   case DELETE_TODO:
+      //   return state.filter(todo =>
+      //     todo.id !== action.id
+      //   )
+  
+      // case EDIT_TODO:
+      //   return state.map(todo =>
+      //     todo.id === action.id ?
+      //       { ...todo, text: action.text } :
+      //       todo
+      //   )
     default:
       return state
   }
