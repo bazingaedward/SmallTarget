@@ -58,6 +58,9 @@ class App extends React.Component{
         }
       }
     }
+
+    // redux 注入
+    this.store = createStore(reducer, this.indata.preloadedState);
     
 
   }
@@ -103,11 +106,8 @@ class App extends React.Component{
 
   render(){
 
-    // redux 注入
-    const store = createStore(reducer, this.indata.preloadedState);
-
     return (
-      <Provider store={store}>
+      <Provider store={this.store}>
 
         <View style={styles.container}>
 
