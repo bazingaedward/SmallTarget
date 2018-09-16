@@ -10,6 +10,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Tabbar from 'react-native-tabbar-bottom';
 import ListStack from './containers/ListStack'
+import PlotStack from './containers/PlotStack'
 import ProfileScreen from './pages/profile';
 import {createStore} from 'redux';
 import reducer from './reducers'
@@ -71,6 +72,8 @@ class App extends React.Component{
     switch(page){
       case 'List':
         return <ListStack />
+      case 'Analytics':
+      return <PlotStack />
       case 'Profile':
         return <ProfileScreen />
       

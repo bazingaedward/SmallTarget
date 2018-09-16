@@ -1,14 +1,15 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 import { Container, Left, Right, Icon, Content, List, ListItem, Text, 
-    Body, Button } from 'native-base';
+    Body, Button, Header, Title } from 'native-base';
 import FeedbackScreen from './feedback';
 import AboutScreen from './about';
 
 class ProfileScreen extends React.Component {
 
     static navigationOptions = {
-        title: '我的',
+        header: null
+        // title: '我的',
       };
 
     constructor(props){
@@ -19,6 +20,8 @@ class ProfileScreen extends React.Component {
         }
 
         this.indata = {
+            title: '我的',
+            titleIcon: 'person',
             listView: [
                 {
                     title: '关于',
@@ -37,10 +40,35 @@ class ProfileScreen extends React.Component {
 
     }
 
+    /**
+     * 渲染导航栏
+     * react-navigation无法提供header中的this绑定，故取消 
+     */
+    renderHeader(){
+
+        return (
+          <Header>
+            <Left>
+              <Button transparent>
+                <Icon name={this.indata.titleIcon} />
+              </Button>
+            </Left>
+            <Body>
+              <Title>{this.indata.title}</Title>
+            </Body>
+            <Right>
+            </Right>
+          </Header>
+        )
+  
+      }
+
     render() {
 
         return (
             <Container>
+
+                {this.renderHeader()}
                 <Content>
                 <List>
                     {this.indata.listView.map((item, idx) => {

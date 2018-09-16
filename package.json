@@ -8,10 +8,12 @@
     "dev": "react-native run-android"
   },
   "dependencies": {
+    "date-fns": "^1.29.0",
     "immutable": "4.0.0-rc.9",
     "native-base": "^2.7.2",
     "react": "16.4.1",
     "react-native": "0.56.0",
+    "react-native-datepicker": "^1.7.2",
     "react-native-dialog": "^5.1.0",
     "react-native-easy-grid": "^0.2.0",
     "react-native-tabbar-bottom": "^1.0.4",

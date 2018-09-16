@@ -11,6 +11,7 @@ import { Container, Left, Right, Icon, Content, List, ListItem, Text,
  import { Col, Row, Grid } from 'react-native-easy-grid';
  import Dialog from 'react-native-dialog';
  import {View, StyleSheet} from 'react-native';
+ import {format} from 'date-fns';
 
 class AddScreen extends React.Component {
 
@@ -25,25 +26,32 @@ class AddScreen extends React.Component {
         let type = props.navigation.getParam('type');
         let item = props.navigation.getParam('item')
 
+        let param = {}
+
         switch(type){
             case 'add': 
-                this.state = {
-                    title: '',
-                    intro: '',
-                    showDialog: false,
+                param = {
                     editMode: false,
                 }
+                
                 break;
             case 'edit': 
-                this.state = {
+                param = {
                     title: item.title,
                     intro: item.intro,
-                    showDialog: false,
                     editMode: true,
                     _taskId: item._taskId
                 }
                 break;
         }
+
+        this.state = Object.assign({
+            title: '',
+            intro: '',
+            showDialog: false,
+            startDate: new Date(),
+            endDate: new Date(),
+        }, param)
         
         this.indata = {
             title: type === 'add' ? '添加任务' : '编辑任务',
@@ -97,7 +105,16 @@ class AddScreen extends React.Component {
 
     }
 
-/**
+    /**
+     * 设置起始和结束日期
+     * @param {string} typeString [startDate, endDate] 
+     * @param {Date} newDate 
+     */
+    setDate(typeString, date) {
+        this.setState({ [typeString]: date });
+    }
+
+    /**
      * 渲染导航栏
      * react-navigation无法提供header中的this绑定，故取消 
      */
@@ -130,7 +147,18 @@ class AddScreen extends React.Component {
      */
     renderBody(){
 
-        const {title, intro, editMode} = this.state;
+        const {title, intro, editMode, startDate, endDate} = this.state;
+
+        let datePickerCommonProps = {
+            locale: "en",
+            timeZoneOffsetInMinutes: undefined,
+            modalTransparent: false,
+            animationType: 'fade',
+            androidMode: "default",
+            textStyle: { color: "green" },
+            placeHolderTextStyle: { color: "#d3d3d3" },
+            formatChosenDate: date => format(date, 'YYYY年MM月DD日')
+        }
 
         return (
             <Content>
@@ -142,13 +170,32 @@ class AddScreen extends React.Component {
                             onChangeText={title => this.setState({title})}
                         />
                     </Item>
-                    <Textarea 
-                        rowSpan={5} 
-                        bordered 
-                        placeholder="请输入任务简介" 
-                        value={intro}
-                        onChangeText={intro => this.setState({intro})}
-                    />
+                    
+                    <Item style={{justifyContent: 'space-between'}}>
+                        <DatePicker
+                            {...datePickerCommonProps}
+                            placeHolderText="任务起始日期"
+                            onDateChange={this.setDate.bind(this, 'startDate')}
+                        />
+                        <Text>~</Text>
+                        <DatePicker
+                            {...datePickerCommonProps}
+                            minimumDate={startDate}
+                            placeHolderText="任务结束日期"
+                            onDateChange={this.setDate.bind(this, 'endDate')}
+                        />
+                    </Item>
+
+                    <Item>
+                        <Textarea
+                            style={{flex: 1}} 
+                            rowSpan={5} 
+                            bordered 
+                            placeholder="请输入任务简介" 
+                            value={intro}
+                            onChangeText={intro => this.setState({intro})}
+                        />
+                    </Item>
                 </Form>
 
                 {editMode && (
