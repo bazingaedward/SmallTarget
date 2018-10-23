@@ -72,7 +72,7 @@ class ListScreen extends React.Component {
           </Left>
           <Body>
             <Title>{this.indata.title}</Title>
-          </Body>
+          </Body>z
           <Right>
             <Button transparent onPress={this.goTaskDetail.bind(this, 'add')}>
               <Icon name='add' />
