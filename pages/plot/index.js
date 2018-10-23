@@ -83,7 +83,7 @@ class PlotScreen extends React.Component {
   
         return (
           <Content >
-              <Echarts option={this.getOption()} height={300} />
+              <Echarts option={this.getOption()} height={300} style/>
             {/* <ReactEcharts option={this.getOption()} s/> */}
           </Content>
         )
